@@ -1,4 +1,5 @@
 const application = document.getElementById("app");
+let playersName = [];
 
 function run() {
 
@@ -7,6 +8,7 @@ function run() {
     buttonStart = document.createElement("button");
     buttonStart.innerHTML = "Nouvelle Partie";
     buttonStart.addEventListener("click", () => { requestNumbersOfPlayers() });
+
     application.appendChild(buttonStart);
 
 }
@@ -21,7 +23,6 @@ function requestNumbersOfPlayers() {
     label.innerHTML = "Définissez le nombre de joueur.";
 
     select = document.createElement("select");
-    select.setAttribute("id", "selectChoice");
 
     for (let i = 1; i < 5; i++) {
         option = document.createElement("option");
@@ -48,7 +49,7 @@ function requestNumbersOfPlayers() {
 
 function enterThePlayersNames(numberOfPlayers) {
 
-    let playersName = [], form, input, label, submitButton;
+    let form, input, label, submitButton;
 
     form = application.getElementsByTagName('form')[0];
     form.innerHTML = '';
@@ -64,8 +65,6 @@ function enterThePlayersNames(numberOfPlayers) {
         input.setAttribute("maxlength", 20);
         input.setAttribute("name", i);
 
-        playersName.push(input);
-
         form.appendChild(label);
         form.appendChild(input);
     }
@@ -74,12 +73,12 @@ function enterThePlayersNames(numberOfPlayers) {
     submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
 
-        if (checkInputs(playersName)) {
-            savePlayersName(playersName);
+        if (checkInputs()) {
+            savePlayersName();
+            showPlayersName();
+            leaveTheGame();
         } else {
-            let error = document.createElement("p");
-            error.innerHTML = "Un pseudo n'est pas valide";
-            application.appendChild(error)
+            showError();
         }
 
         event.preventDefault();
@@ -89,41 +88,52 @@ function enterThePlayersNames(numberOfPlayers) {
     application.appendChild(form);
 }
 
-function checkInputs(playersName) {
+function checkInputs() {
 
-    let input, passTheTest, AllInputsAreValid = true;
+    let input, passTheTest;
+    let arrayOfInput = application.children[0].getElementsByTagName("input");
 
-    for (let i = 0; i < playersName.length; i++) {
+    for (let i = 0; i < arrayOfInput.length; i++) {
 
-        input = playersName[i].value;
+        input = arrayOfInput[i].value;
 
-        passTheTest = input.match(/^[a-zA-Z]\w{3,20}$/g)
+        passTheTest = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
         if (!passTheTest) {
-            AllInputsAreValid = false;
+            return false;
         }
 
     }
 
-    return AllInputsAreValid;
+    return true;
 
 }
 
-function savePlayersName(arrayOfInput) {
+function savePlayersName() {
+    let arrayOfInput = application.children[0].getElementsByTagName("input");
 
-    let nameOfThePlayer, paragraph, buttonLeave;
+    for (let i = 0; i < arrayOfInput.length; i++) {
+        playersName.push(arrayOfInput[i].value);
+    }
+}
+
+function showPlayersName() {
+
+    let displayOfAPlayerName
 
     application.innerHTML = '';
 
-    for (let i = 0; i < arrayOfInput.length; i++) {
-        nameOfThePlayer = arrayOfInput[i].value;
+    for (let i = 0; i < playersName.length; i++) {
 
-        paragraph = document.createElement('p');
-        paragraph.innerHTML = nameOfThePlayer;
+        displayOfAPlayerName = document.createElement('p');
+        displayOfAPlayerName.innerHTML = playersName[i];
 
-        application.appendChild(paragraph);
+        application.appendChild(displayOfAPlayerName);
     }
 
+}
+
+function leaveTheGame() {
     buttonLeave = document.createElement("button");
     buttonLeave.innerHTML = 'Quitter';
     buttonLeave.addEventListener("click", (event) => {
@@ -131,9 +141,19 @@ function savePlayersName(arrayOfInput) {
         event.preventDefault();
     });
     application.appendChild(buttonLeave);
-
 }
 
+function showError() {
+    let errorMessage = document.getElementById("errorMessage");
+
+    if (!errorMessage) {
+        errorMessage = document.createElement("p");
+        errorMessage.setAttribute("id", "errorMessage");
+        errorMessage.innerHTML = "Un pseudo n'est pas valide";
+        application.appendChild(errorMessage)
+    }
+
+}
 
 // App Launch
 
