@@ -134,6 +134,9 @@ function showPlayersName() {
 }
 
 function leaveTheGame() {
+    
+    let buttonLeave;
+    
     buttonLeave = document.createElement("button");
     buttonLeave.innerHTML = 'Quitter';
     buttonLeave.addEventListener("click", (event) => {
@@ -144,6 +147,7 @@ function leaveTheGame() {
 }
 
 function showError() {
+    
     let errorMessage = document.getElementById("errorMessage");
 
     if (!errorMessage) {
