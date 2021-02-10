@@ -99,7 +99,7 @@ function checkInputs() {
 
         passTheTest = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
-        if (!passTheTest) {
+        if (passTheTest === null) {
             return false;
         }
 
