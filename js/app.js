@@ -1,5 +1,5 @@
 const application = document.getElementById("app");
-const playersName = [];
+let playersName = [];
 
 function run() {
 
