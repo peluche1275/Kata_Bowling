@@ -3,7 +3,7 @@ const playersName = [];
 
 function run() {
 
-    let buttonStart;
+    const buttonStart;
 
     buttonStart = document.createElement("button");
     buttonStart.innerHTML = "Nouvelle Partie";
