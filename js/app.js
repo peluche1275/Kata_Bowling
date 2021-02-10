@@ -88,16 +88,16 @@ function enterThePlayersNames(numberOfPlayers) {
 
 function checkInputs() {
 
-    let input, passTheTest;
+    let input, validName;
     let arrayOfInput = application.children[0].getElementsByTagName("input");
 
     for (let i = 0; i < arrayOfInput.length; i++) {
 
         input = arrayOfInput[i].value;
 
-        passTheTest = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
+        validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
-        if (!passTheTest) {
+        if (!validName) {
             return false;
         }
 
