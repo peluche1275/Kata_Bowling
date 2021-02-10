@@ -18,21 +18,20 @@ function requestNumbersOfPlayers() {
     let form, label, select, option, submitButton;
 
     form = document.createElement("form");
-
     label = document.createElement("label");
-    label.innerHTML = "Définissez le nombre de joueur.";
-
     select = document.createElement("select");
+    submitButton = document.createElement("button");
+
+    label.innerHTML = "Définissez le nombre de joueur.";
+    submitButton.innerHTML = "Envoyer";
 
     for (let i = 1; i < 5; i++) {
         option = document.createElement("option");
         option.setAttribute("value", i);
         option.innerHTML = i;
         select.appendChild(option);
-    }
+    } 
 
-    submitButton = document.createElement("button");
-    submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
         enterThePlayersNames(select.value);
         event.preventDefault();
