@@ -16,21 +16,20 @@ function run() {
 function requestNumbersOfPlayers() {
 
     const form = document.createElement("form");
-
     const label = document.createElement("label");
-    label.innerHTML = "Définissez le nombre de joueur.";
-
     const select = document.createElement("select");
+    const submitButton = document.createElement("button");
+
+    label.innerHTML = "Définissez le nombre de joueur.";
+    submitButton.innerHTML = "Envoyer";
 
     for (let i = 1; i < 5; i++) {
         const option = document.createElement("option");
         option.setAttribute("value", i);
         option.innerHTML = i;
         select.appendChild(option);
-    }
+    } 
 
-    const submitButton = document.createElement("button");
-    submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
         enterThePlayersNames(select.value);
         event.preventDefault();
