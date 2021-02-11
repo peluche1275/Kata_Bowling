@@ -15,23 +15,21 @@ function run() {
 
 function requestNumbersOfPlayers() {
 
-    let form, label, select, option, submitButton;
+    const form = document.createElement("form");
 
-    form = document.createElement("form");
-
-    label = document.createElement("label");
+    const label = document.createElement("label");
     label.innerHTML = "Définissez le nombre de joueur.";
 
-    select = document.createElement("select");
+    const select = document.createElement("select");
 
     for (let i = 1; i < 5; i++) {
-        option = document.createElement("option");
+        const option = document.createElement("option");
         option.setAttribute("value", i);
         option.innerHTML = i;
         select.appendChild(option);
     }
 
-    submitButton = document.createElement("button");
+    const submitButton = document.createElement("button");
     submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
         enterThePlayersNames(select.value);
@@ -90,16 +88,16 @@ function enterThePlayersNames(numberOfPlayers) {
 
 function checkInputs() {
 
-    let input, passTheTest;
+    let input, validName;
     let arrayOfInput = application.children[0].getElementsByTagName("input");
 
     for (let i = 0; i < arrayOfInput.length; i++) {
 
         input = arrayOfInput[i].value;
 
-        passTheTest = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
+        validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
-        if (passTheTest === null) {
+        if (!validName === null) {
             return false;
         }
 
