@@ -2,7 +2,6 @@ const application = document.getElementById("app");
 let playersName = [];
 
 function run() {
-
     let buttonStart;
 
     buttonStart = document.createElement("button");
@@ -10,11 +9,9 @@ function run() {
     buttonStart.addEventListener("click", () => { requestNumbersOfPlayers() });
 
     application.appendChild(buttonStart);
-
 }
 
 function requestNumbersOfPlayers() {
-
     const form = document.createElement("form");
     const label = document.createElement("label");
     const select = document.createElement("select");
@@ -41,18 +38,15 @@ function requestNumbersOfPlayers() {
 
     application.innerHTML = "";
     application.appendChild(form);
-
 }
 
 function enterThePlayersNames(numberOfPlayers) {
-
     let form, input, label, submitButton;
 
     form = application.getElementsByTagName('form')[0];
     form.innerHTML = '';
 
     for (let i = 0; i < numberOfPlayers; i++) {
-
         label = document.createElement("label");
         label.innerHTML = 'Joueur n° ' + (i + 1);
 
@@ -86,12 +80,10 @@ function enterThePlayersNames(numberOfPlayers) {
 }
 
 function checkInputs() {
-
     let input, validName;
     let arrayOfInput = application.children[0].getElementsByTagName("input");
 
     for (let i = 0; i < arrayOfInput.length; i++) {
-
         input = arrayOfInput[i].value;
 
         validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
@@ -99,11 +91,8 @@ function checkInputs() {
         if (!validName === null) {
             return false;
         }
-
     }
-
     return true;
-
 }
 
 function savePlayersName() {
@@ -115,23 +104,19 @@ function savePlayersName() {
 }
 
 function showPlayersName() {
-
     let displayOfAPlayerName
 
     application.innerHTML = '';
 
     for (let i = 0; i < playersName.length; i++) {
-
         displayOfAPlayerName = document.createElement('p');
         displayOfAPlayerName.innerHTML = playersName[i];
 
         application.appendChild(displayOfAPlayerName);
     }
-
 }
 
-function leaveTheGame() {
-    
+function leaveTheGame() {    
     let buttonLeave;
     
     buttonLeave = document.createElement("button");
@@ -144,16 +129,14 @@ function leaveTheGame() {
 }
 
 function showError() {
-    
     let errorMessage = document.getElementById("errorMessage");
 
-    if (!errorMessage) {
+    if (errorMessage === null) {
         errorMessage = document.createElement("p");
         errorMessage.setAttribute("id", "errorMessage");
         errorMessage.innerHTML = "Un pseudo n'est pas valide";
         application.appendChild(errorMessage)
     }
-
 }
 
 // App Launch
