@@ -1,6 +1,6 @@
 # Kata_Bowling
 
-Ce projet est un kata dans le cadre de mon accompagnement chez [D2velop](https://d2velop.fr/).
+Ce projet est un kata en procédural javascript vanilla dans le cadre de mon accompagnement chez [D2velop](https://d2velop.fr/).
 
 Une application qui permettra de gérer une partie de bowling avec plusieurs joueurs.
 
