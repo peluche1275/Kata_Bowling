@@ -1,18 +1,17 @@
-const application = document.getElementById("app");
-let playersName = [];
+const playersName = [];
 
-function run() {
-    let buttonStart;
+function activeTheStartButton() {
+    const buttonStart = document.getElementById("startGame");
 
-    buttonStart = document.createElement("button");
-    buttonStart.innerHTML = "Nouvelle Partie";
-    buttonStart.addEventListener("click", () => { requestNumbersOfPlayers() });
-
-    application.appendChild(buttonStart);
+    buttonStart.addEventListener("click", (event) => {
+        requestNumbersOfPlayers();
+        event.preventDefault();
+        buttonStart.style.display = "none";
+    });
 }
 
 function requestNumbersOfPlayers() {
-    const form = document.createElement("form");
+    const form = document.getElementById("mainForm");
     const label = document.createElement("label");
     const select = document.createElement("select");
     const submitButton = document.createElement("button");
@@ -35,22 +34,17 @@ function requestNumbersOfPlayers() {
     form.appendChild(label);
     form.appendChild(select);
     form.appendChild(submitButton);
-
-    application.innerHTML = "";
-    application.appendChild(form);
 }
 
 function enterThePlayersNames(numberOfPlayers) {
-    let form, input, label, submitButton;
-
-    form = application.getElementsByTagName('form')[0];
+    const form = document.getElementById("mainForm");
     form.innerHTML = '';
 
     for (let i = 0; i < numberOfPlayers; i++) {
-        label = document.createElement("label");
+        const label = document.createElement("label");
         label.innerHTML = 'Joueur n° ' + (i + 1);
 
-        input = document.createElement("input");
+        const input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("minlength", 4);
         input.setAttribute("maxlength", 20);
@@ -60,15 +54,17 @@ function enterThePlayersNames(numberOfPlayers) {
         form.appendChild(input);
     }
 
-    submitButton = document.createElement("button");
+    const submitButton = document.createElement("button");
     submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
 
         if (checkInputs()) {
+            console.log("Pour moi c'est O.K")
             savePlayersName();
             showPlayersName();
-            leaveTheGame();
+            addButtonWhoReloadThePage();
         } else {
+            console.log("OH MEC YA UNE ERREUR LA")
             showError();
         }
 
@@ -76,19 +72,18 @@ function enterThePlayersNames(numberOfPlayers) {
     })
 
     form.appendChild(submitButton);
-    application.appendChild(form);
 }
 
 function checkInputs() {
-    let input, validName;
-    let arrayOfInput = application.children[0].getElementsByTagName("input");
+    const form = document.getElementById("mainForm");
+    const arrayOfInput = form.getElementsByTagName("input");
 
     for (let i = 0; i < arrayOfInput.length; i++) {
         input = arrayOfInput[i].value;
 
         validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
-        if (!validName === null) {
+        if (validName === null) {
             return false;
         }
     }
@@ -96,7 +91,8 @@ function checkInputs() {
 }
 
 function savePlayersName() {
-    let arrayOfInput = application.children[0].getElementsByTagName("input");
+    const form = document.getElementById("mainForm");
+    const arrayOfInput = form.getElementsByTagName("input");
 
     for (let i = 0; i < arrayOfInput.length; i++) {
         playersName.push(arrayOfInput[i].value);
@@ -104,41 +100,36 @@ function savePlayersName() {
 }
 
 function showPlayersName() {
-    let displayOfAPlayerName
-
+    const application = document.getElementById("app");
     application.innerHTML = '';
 
     for (let i = 0; i < playersName.length; i++) {
-        displayOfAPlayerName = document.createElement('p');
+        const displayOfAPlayerName = document.createElement('p');
         displayOfAPlayerName.innerHTML = playersName[i];
-
         application.appendChild(displayOfAPlayerName);
     }
 }
 
-function leaveTheGame() {    
-    let buttonLeave;
-    
-    buttonLeave = document.createElement("button");
+function addButtonWhoReloadThePage() {    
+    const application = document.getElementById("app")
+    const buttonLeave = document.createElement("button");
+
     buttonLeave.innerHTML = 'Quitter';
     buttonLeave.addEventListener("click", (event) => {
         document.location.reload();
         event.preventDefault();
     });
+
     application.appendChild(buttonLeave);
 }
 
 function showError() {
-    let errorMessage = document.getElementById("errorMessage");
-
-    if (errorMessage === null) {
-        errorMessage = document.createElement("p");
-        errorMessage.setAttribute("id", "errorMessage");
-        errorMessage.innerHTML = "Un pseudo n'est pas valide";
-        application.appendChild(errorMessage)
-    }
+    const errorMessage = document.getElementById("errorMessage");
+    
+    errorMessage.innerHTML = "Il y a un problème avec un pseudo";
+    errorMessage.style.display = "block";
 }
 
 // App Launch
 
-run();
+activeTheStartButton();
