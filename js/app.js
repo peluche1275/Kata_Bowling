@@ -38,13 +38,17 @@ function requestNumbersOfPlayers() {
 
 function enterThePlayersNames(numberOfPlayers) {
     const form = document.getElementById("mainForm");
+    const submitButton = document.createElement("button");
+
     form.innerHTML = '';
+    submitButton.innerHTML = "Envoyer";
 
     for (let i = 0; i < numberOfPlayers; i++) {
         const label = document.createElement("label");
-        label.innerHTML = 'Joueur n° ' + (i + 1);
-
         const input = document.createElement("input");
+
+        label.innerHTML = 'Joueur n° ' + (i + 1);
+        
         input.setAttribute("type", "text");
         input.setAttribute("minlength", 4);
         input.setAttribute("maxlength", 20);
@@ -54,16 +58,12 @@ function enterThePlayersNames(numberOfPlayers) {
         form.appendChild(input);
     }
 
-    const submitButton = document.createElement("button");
-    submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
         if (checkInputs()) {
-            console.log("Pour moi c'est O.K")
             savePlayersName();
             showPlayersName();
             addButtonWhoReloadThePage();
         } else {
-            console.log("OH MEC YA UNE ERREUR LA")
             showError();
         }
 
@@ -86,7 +86,7 @@ function checkInputs() {
             return false;
         }
     }
-    
+
     return true;
 }
 
@@ -101,24 +101,29 @@ function savePlayersName() {
 
 function showPlayersName() {
     const application = document.getElementById("app");
+    
     application.innerHTML = '';
 
     for (let i = 0; i < playersName.length; i++) {
         const displayOfAPlayerName = document.createElement('p');
+
         displayOfAPlayerName.innerHTML = playersName[i];
+
         application.appendChild(displayOfAPlayerName);
     }
 }
 
 function addButtonWhoReloadThePage() {    
-    const application = document.getElementById("app")
+    const application = document.getElementById("app");
     const buttonLeave = document.createElement("button");
 
     buttonLeave.innerHTML = 'Quitter';
+
     buttonLeave.addEventListener("click", (event) => {
         document.location.reload();
         event.preventDefault();
     });
+
     application.appendChild(buttonLeave);
 }
 
