@@ -57,7 +57,6 @@ function enterThePlayersNames(numberOfPlayers) {
     const submitButton = document.createElement("button");
     submitButton.innerHTML = "Envoyer";
     submitButton.addEventListener("click", (event) => {
-
         if (checkInputs()) {
             console.log("Pour moi c'est O.K")
             savePlayersName();
@@ -87,6 +86,7 @@ function checkInputs() {
             return false;
         }
     }
+    
     return true;
 }
 
@@ -119,7 +119,6 @@ function addButtonWhoReloadThePage() {
         document.location.reload();
         event.preventDefault();
     });
-
     application.appendChild(buttonLeave);
 }
 
