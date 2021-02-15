@@ -1,6 +1,6 @@
 const playersName = [];
 
-function activeTheStartButton() {
+function setStartButtonHandler() {
     const buttonStart = document.getElementById("startGame");
 
     buttonStart.addEventListener("click", (event) => {
@@ -62,7 +62,7 @@ function enterThePlayersNames(numberOfPlayers) {
         if (checkInputs()) {
             savePlayersName();
             showPlayersName();
-            addButtonWhoReloadThePage();
+            AddLeaveButton();
         } else {
             showError();
         }
@@ -113,7 +113,7 @@ function showPlayersName() {
     }
 }
 
-function addButtonWhoReloadThePage() {    
+function AddLeaveButton() {    
     const application = document.getElementById("app");
     const buttonLeave = document.createElement("button");
 
@@ -136,4 +136,4 @@ function showError() {
 
 // App Launch
 
-activeTheStartButton();
+setStartButtonHandler();
