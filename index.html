@@ -11,9 +11,32 @@
     <h1>Bowling Game Manager</h1>
     <div id="app">
         <button id="startGame">Nouvelle Partie</button>
-        <form id="mainForm"></form>
+
+        <form id="requestForm" class="hidden">
+            <label id="requestLabel">Définissez le nombre de joueur.</label>
+            <select id="requestSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <button id="requestButton">Envoyer</button>
+        </form>
+
+        <form id="enterPlayerNameForm" class="hidden">
+            <label id="label_0" class="hidden">Joueur n° 1</label>
+            <input id="input_0" class="hidden" type="text" minlength="4" maxlength="20" name="0">
+            <label id="label_1" class="hidden">Joueur n° 2</label>
+            <input id="input_1" class="hidden"type="text" minlength="4" maxlength="20" name="1">
+            <label id="label_2" class="hidden">Joueur n° 3</label>
+            <input id="input_2" class="hidden"type="text" minlength="4" maxlength="20" name="2">
+            <label id="label_3" class="hidden">Joueur n° 4</label>
+            <input id="input_3" class="hidden"type="text" minlength="4" maxlength="20" name="3">
+            <button id="enterPlayerNameButton">Envoyer</button>
+        </form>
         <p id="errorMessage"></p>
     </div>
 </body>
 <script src="js/app.js"></script>
+
 </html>
