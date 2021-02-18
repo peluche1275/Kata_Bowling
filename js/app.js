@@ -46,10 +46,10 @@ class bowlingGameManager {
                 this.savePlayersName(numberOfPlayers);
                 this.showPlayersName();
                 this.AddLeaveButton();
+                form.style.display = "none";
             } else {
                 this.showError();
             }
-    
             event.preventDefault();
         })
     }
