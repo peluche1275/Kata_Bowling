@@ -21,6 +21,6 @@ h1{
     flex-direction: column;
 }
 
-#errorMessage{
+#errorMessage,.hidden{
     display: none;
 }

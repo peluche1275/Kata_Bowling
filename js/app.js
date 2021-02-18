@@ -14,56 +14,36 @@ class bowlingGameManager {
     }
 
     requestNumbersOfPlayers() {
-        const form = document.getElementById("mainForm");
-        const label = document.createElement("label");
-        const select = document.createElement("select");
-        const submitButton = document.createElement("button");
+        const form = document.getElementById("requestForm");
+        const submitButton = document.getElementById("requestButton");
+        const select = document.getElementById("requestSelect");
 
-        label.innerHTML = "Définissez le nombre de joueur.";
-        submitButton.innerHTML = "Envoyer";
-
-        for (let i = 1; i < 5; i++) {
-            const option = document.createElement("option");
-            option.setAttribute("value", i);
-            option.innerHTML = i;
-            select.appendChild(option);
-        }
+        form.style.display = "flex";
 
         submitButton.addEventListener("click", (event) => {
             this.enterThePlayersNames(select.value);
+            form.style.display = "none";
             event.preventDefault();
         });
-
-        form.appendChild(label);
-        form.appendChild(select);
-        form.appendChild(submitButton);
     }
 
     enterThePlayersNames(numberOfPlayers) {
-        const form = document.getElementById("mainForm");
-        const submitButton = document.createElement("button");
-    
-        form.innerHTML = '';
-        submitButton.innerHTML = "Envoyer";
-    
+        const form = document.getElementById("enterPlayerNameForm");
+        const submitButton = document.getElementById("enterPlayerNameButton");
+
         for (let i = 0; i < numberOfPlayers; i++) {
-            const label = document.createElement("label");
-            const input = document.createElement("input");
+            const label = document.getElementById("label_"+i);
+            const input = document.getElementById("input_"+i);
     
-            label.innerHTML = 'Joueur n° ' + (i + 1);
-            
-            input.setAttribute("type", "text");
-            input.setAttribute("minlength", 4);
-            input.setAttribute("maxlength", 20);
-            input.setAttribute("name", i);
-    
-            form.appendChild(label);
-            form.appendChild(input);
+            label.style.display = "flex";
+            input.style.display = "flex";
         }
-    
+        
+        form.style.display = "flex";
+
         submitButton.addEventListener("click", (event) => {
-            if (this.checkInputs()) {
-                this.savePlayersName();
+            if (this.checkInputs(numberOfPlayers)) {
+                this.savePlayersName(numberOfPlayers);
                 this.showPlayersName();
                 this.AddLeaveButton();
             } else {
@@ -72,16 +52,11 @@ class bowlingGameManager {
     
             event.preventDefault();
         })
-    
-        form.appendChild(submitButton);
     }
 
-    checkInputs() {
-        const form = document.getElementById("mainForm");
-        const arrayOfInput = form.getElementsByTagName("input");
-
-        for (let i = 0; i < arrayOfInput.length; i++) {
-            const input = arrayOfInput[i].value;
+    checkInputs(numberOfPlayers) {
+        for (let i = 0; i < numberOfPlayers; i++) {
+            const input = document.getElementById("input_"+i).value;
 
             let validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
 
@@ -93,12 +68,10 @@ class bowlingGameManager {
         return true;
     }
 
-    savePlayersName() {
-        const form = document.getElementById("mainForm");
-        const arrayOfInput = form.getElementsByTagName("input");
-
-        for (let i = 0; i < arrayOfInput.length; i++) {
-            this.playersName.push(arrayOfInput[i].value);
+    savePlayersName(numberOfPlayers) {
+        for (let i = 0; i < numberOfPlayers; i++) {
+            const input = document.getElementById("input_"+i).value;
+            this.playersName.push(input);
         }
     }
 
