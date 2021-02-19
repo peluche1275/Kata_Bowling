@@ -27,14 +27,243 @@
             <label id="label_0" class="hidden">Joueur n° 1</label>
             <input id="input_0" class="hidden" type="text" minlength="4" maxlength="20" name="0">
             <label id="label_1" class="hidden">Joueur n° 2</label>
-            <input id="input_1" class="hidden"type="text" minlength="4" maxlength="20" name="1">
+            <input id="input_1" class="hidden" type="text" minlength="4" maxlength="20" name="1">
             <label id="label_2" class="hidden">Joueur n° 3</label>
-            <input id="input_2" class="hidden"type="text" minlength="4" maxlength="20" name="2">
+            <input id="input_2" class="hidden" type="text" minlength="4" maxlength="20" name="2">
             <label id="label_3" class="hidden">Joueur n° 4</label>
-            <input id="input_3" class="hidden"type="text" minlength="4" maxlength="20" name="3">
+            <input id="input_3" class="hidden" type="text" minlength="4" maxlength="20" name="3">
             <button id="enterPlayerNameButton">Envoyer</button>
         </form>
-        <p id="errorMessage"></p>
+
+        <div id="scoreChart" class="hidden">
+            <div class="playerScoreTable hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">1</th>
+                            <th scope="col" colspan="2">2</th>
+                            <th scope="col" colspan="2">3</th>
+                            <th scope="col" colspan="2">4</th>
+                            <th scope="col" colspan="2">5</th>
+                            <th scope="col" colspan="2">6</th>
+                            <th scope="col" colspan="2">7</th>
+                            <th scope="col" colspan="2">8</th>
+                            <th scope="col" colspan="2">9</th>
+                            <th scope="col" colspan="2">10</th>
+                            <th scope="col" colspan="1">total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td rowspan="2" id="total-score"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="playerScoreTable hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">1</th>
+                            <th scope="col" colspan="2">2</th>
+                            <th scope="col" colspan="2">3</th>
+                            <th scope="col" colspan="2">4</th>
+                            <th scope="col" colspan="2">5</th>
+                            <th scope="col" colspan="2">6</th>
+                            <th scope="col" colspan="2">7</th>
+                            <th scope="col" colspan="2">8</th>
+                            <th scope="col" colspan="2">9</th>
+                            <th scope="col" colspan="2">10</th>
+                            <th scope="col" colspan="1">total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td rowspan="2" id="total-score"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="playerScoreTable hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">1</th>
+                            <th scope="col" colspan="2">2</th>
+                            <th scope="col" colspan="2">3</th>
+                            <th scope="col" colspan="2">4</th>
+                            <th scope="col" colspan="2">5</th>
+                            <th scope="col" colspan="2">6</th>
+                            <th scope="col" colspan="2">7</th>
+                            <th scope="col" colspan="2">8</th>
+                            <th scope="col" colspan="2">9</th>
+                            <th scope="col" colspan="2">10</th>
+                            <th scope="col" colspan="1">total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td rowspan="2" id="total-score"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="playerScoreTable hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">1</th>
+                            <th scope="col" colspan="2">2</th>
+                            <th scope="col" colspan="2">3</th>
+                            <th scope="col" colspan="2">4</th>
+                            <th scope="col" colspan="2">5</th>
+                            <th scope="col" colspan="2">6</th>
+                            <th scope="col" colspan="2">7</th>
+                            <th scope="col" colspan="2">8</th>
+                            <th scope="col" colspan="2">9</th>
+                            <th scope="col" colspan="2">10</th>
+                            <th scope="col" colspan="1">total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td scope="row" class='rolls'></td>
+                            <td rowspan="2" id="total-score"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                            <td scope="row" colspan="2" class='frames'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button>Abandonner</button>
+        </div>
+    </div>
+    <p id="errorMessage"></p>
     </div>
 </body>
 <script src="js/app.js"></script>
