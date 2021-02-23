@@ -72,7 +72,7 @@ class bowlingGameManager {
     savePlayersName(numberOfPlayers) {
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
-            const playerInformation = { name: input, score: [] }
+            const playerInformation = { name: input, launchHistory: [], scoreByFrames: [] }
             this.playersInformations.push(playerInformation);
         }
     }
@@ -92,44 +92,65 @@ class bowlingGameManager {
                 const score = parseInt(document.getElementsByClassName("playerScoreTable_ScoreSelect")[i].value)
                 console.log(score)
                 this.addLaunch(i, score);
+                this.frameScoreCalcul(i);
                 event.preventDefault();
             });
         }
     }
 
-    addLaunch(i, score) {
-        const scoreTable = this.playersInformations[i].score;
-        const scoreTableLength = scoreTable.length
+    addLaunch(playerNumero, fallenPins) {
+        const scoreTable = this.playersInformations[playerNumero].launchHistory;
+        const scoreTableLength = scoreTable.length;
+        const printScoreTable = document.getElementsByClassName("allLaunchShow")[playerNumero];
+        const td = printScoreTable.getElementsByTagName("td")[scoreTableLength]
 
-        if (scoreTableLength >= 20) {
+        if (scoreTableLength >= 21) {
             console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
             return null
         }
 
-        if (score > 10) {
-            console.log("ERREUR IL N'Y A QUE 10 QUILLES ICI ENCULE")
+        if (fallenPins > 10) {
+            console.log("ERREUR : IL N'Y A QUE 10 QUILLES")
             return null
         }
 
-        if (scoreTableLength % 2 === 0 && score === 10) {
-            scoreTable.push(score);
-            scoreTable.push("X");
-            console.log(BGM.playersInformations[i].score)
+        if (scoreTableLength % 2 === 0 && fallenPins === 10) { // C'EST UN STRIKE ??
+
+            scoreTable.push("X", "X");
+            console.log(BGM.playersInformations[playerNumero].launchHistory)
+
+            printScoreTable.getElementsByTagName("td")[scoreTableLength + 1].innerHTML = "X"
+
             return null
         }
 
-        if (scoreTableLength % 2 != 0) { // CAS 1,3,5,7,9
+        if (scoreTableLength % 2 != 0) { // SECOND LANCER DU FRAMES
             const previousLaunch = scoreTable[scoreTableLength - 1]
             console.log(previousLaunch)
 
-            if ((score + previousLaunch) > 10) {
-                console.log("ERREUR IL N'Y A QUE 10 QUILLES CEST MOI QUI BUG")
+            if ((fallenPins + previousLaunch) > 10) {
+                console.log("ERREUR IL N'Y A QUE 10 QUILLES")
                 return null
             }
         }
 
-        scoreTable.push(score);
-        console.log(BGM.playersInformations[i].score)
+
+        scoreTable.push(fallenPins);
+        td.innerHTML = fallenPins;
+        console.log(BGM.playersInformations[playerNumero].launchHistory)
+    }
+
+    frameScoreCalcul(playerNumero) {
+        const scoreTable = this.playersInformations[playerNumero].launchHistory;
+        const scoreByFrames = this.playersInformations[playerNumero].scoreByFrames;
+        const numberOfFrame = scoreByFrames.length * 2;
+        const printScoreTable = document.getElementsByClassName("frames")[playerNumero];
+        const td = printScoreTable.getElementsByTagName("td")[scoreByFrames.length]
+
+        if (scoreTable[numberOfFrame] != null && scoreTable[numberOfFrame + 1] != null) {
+            scoreByFrames.push((scoreTable[numberOfFrame] + scoreTable[numberOfFrame + 1]))
+            console.log(scoreByFrames)
+        }
     }
 
     AddLeaveButton() {
@@ -162,4 +183,4 @@ BGM.setStartButtonHandler();
 
 // BGM.addLaunch(0, 10)
 // BGM.addLaunch(0, 2)
-// console.log(BGM.playersInformations[0].score)
+// console.log(BGM.playersInformations[0].launchHistory)
