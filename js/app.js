@@ -1,6 +1,6 @@
 class bowlingGameManager {
     constructor() {
-        this.playersName = [];
+        this.playersInformations = [];
     }
 
     setStartButtonHandler() {
@@ -45,12 +45,12 @@ class bowlingGameManager {
             if (this.checkInputs(numberOfPlayers)) {
                 this.savePlayersName(numberOfPlayers);
                 this.showTheScoreChart();
-                // this.showPlayersName();
-                // this.AddLeaveButton();
+                this.AddLeaveButton();
                 form.style.display = "none";
             } else {
                 this.showError();
             }
+
             event.preventDefault();
         })
     }
@@ -72,45 +72,73 @@ class bowlingGameManager {
     savePlayersName(numberOfPlayers) {
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
-            this.playersName.push(input);
+            const playerInformation = { name: input, score: [] }
+            this.playersInformations.push(playerInformation);
         }
     }
 
     showTheScoreChart() {
         const scoreChart = document.getElementById("scoreChart");
         scoreChart.style.display = "block";
-        for (let i = 0; i < this.playersName.length; i++) {
+        for (let i = 0; i < this.playersInformations.length; i++) {
             const scoreTable = document.getElementsByClassName("playerScoreTable")[i]
+            const buttonAddLaunch = document.getElementsByClassName("playerScoreTable_Button")[i]
+            const displayOfAPlayerName = document.getElementsByClassName("playerScoreTable_Name")[i];
+
+            displayOfAPlayerName.innerHTML = this.playersInformations[i].name;
             scoreTable.style.display = "block"
+
+            buttonAddLaunch.addEventListener("click", (event) => {
+                const score = parseInt(document.getElementsByClassName("playerScoreTable_ScoreSelect")[i].value)
+                console.log(score)
+                this.addLaunch(i, score);
+                event.preventDefault();
+            });
         }
     }
 
-    // showPlayersName() {
-    //     const application = document.getElementById("app");
+    addLaunch(i, score) {
+        const scoreTable = this.playersInformations[i].score;
+        const scoreTableLength = scoreTable.length
 
-    //     application.innerHTML = '';
+        if (scoreTableLength >= 20) {
+            console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
+            return null
+        }
 
-    //     for (let i = 0; i < this.playersName.length; i++) {
-    //         const displayOfAPlayerName = document.createElement('p');
+        if (score > 10) {
+            console.log("ERREUR IL N'Y A QUE 10 QUILLES ICI ENCULE")
+            return null
+        }
 
-    //         displayOfAPlayerName.innerHTML = this.playersName[i];
+        if (scoreTableLength % 2 === 0 && score === 10) {
+            scoreTable.push(score);
+            scoreTable.push("X");
+            console.log(BGM.playersInformations[i].score)
+            return null
+        }
 
-    //         application.appendChild(displayOfAPlayerName);
-    //     }
-    // }
+        if (scoreTableLength % 2 != 0) { // CAS 1,3,5,7,9
+            const previousLaunch = scoreTable[scoreTableLength - 1]
+            console.log(previousLaunch)
+
+            if ((score + previousLaunch) > 10) {
+                console.log("ERREUR IL N'Y A QUE 10 QUILLES CEST MOI QUI BUG")
+                return null
+            }
+        }
+
+        scoreTable.push(score);
+        console.log(BGM.playersInformations[i].score)
+    }
 
     AddLeaveButton() {
-        const application = document.getElementById("app");
-        const buttonLeave = document.createElement("button");
-
-        buttonLeave.innerHTML = 'Quitter';
+        const buttonLeave = document.getElementById("leaveButton");
 
         buttonLeave.addEventListener("click", (event) => {
             document.location.reload();
             event.preventDefault();
         });
-
-        application.appendChild(buttonLeave);
     }
 
     showError() {
@@ -126,3 +154,12 @@ class bowlingGameManager {
 BGM = new bowlingGameManager();
 
 BGM.setStartButtonHandler();
+
+// BGM.playersInformations[0] = { name: "ROBERT", score: [] }
+
+//  0 1 2 3 4 5 6 7 8 9 //
+// [ , , , , , , , , , ] //
+
+// BGM.addLaunch(0, 10)
+// BGM.addLaunch(0, 2)
+// console.log(BGM.playersInformations[0].score)
