@@ -106,12 +106,12 @@ class bowlingGameManager {
 
         if (scoreTableLength >= 21) {
             console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
-            return null
+            return
         }
 
         if (fallenPins > 10) {
             console.log("ERREUR : IL N'Y A QUE 10 QUILLES")
-            return null
+            return
         }
 
         if (scoreTableLength % 2 === 0 && fallenPins === 10) { // C'EST UN STRIKE ??
@@ -121,7 +121,7 @@ class bowlingGameManager {
 
             printScoreTable.getElementsByTagName("td")[scoreTableLength + 1].innerHTML = "X"
 
-            return null
+            return
         }
 
         if (scoreTableLength % 2 != 0) { // SECOND LANCER DU FRAMES
@@ -130,7 +130,7 @@ class bowlingGameManager {
 
             if ((fallenPins + previousLaunch) > 10) {
                 console.log("ERREUR IL N'Y A QUE 10 QUILLES")
-                return null
+                return
             }
         }
 
@@ -145,10 +145,46 @@ class bowlingGameManager {
         const scoreByFrames = this.playersInformations[playerNumero].scoreByFrames;
         const numberOfFrame = scoreByFrames.length * 2;
         const printScoreTable = document.getElementsByClassName("frames")[playerNumero];
-        const td = printScoreTable.getElementsByTagName("td")[scoreByFrames.length]
+        const td = printScoreTable.getElementsByTagName("td")[scoreByFrames.length];
 
-        if (scoreTable[numberOfFrame] != null && scoreTable[numberOfFrame + 1] != null) {
+        if (scoreTable[numberOfFrame] != null && scoreTable[numberOfFrame + 1] != null) { //(FRAMES EST JOUER)
+
+            if (scoreTable[numberOfFrame] + scoreTable[numberOfFrame + 1] === 10) { // (SPARE)
+                if (scoreTable[numberOfFrame + 2] != null) {
+                    if (scoreTable[numberOfFrame + 2] == "X") {
+                        scoreByFrames.push((scoreTable[numberOfFrame] + scoreTable[numberOfFrame + 1] + 10))
+                        td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
+                    } else {
+                        scoreByFrames.push((scoreTable[numberOfFrame] + scoreTable[numberOfFrame + 1] + scoreTable[numberOfFrame + 2]))
+                        td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
+                    }
+                }
+                return
+            }
+
+            if (scoreTable[numberOfFrame] == "X") { // (STRIKES)
+
+                if (scoreTable[numberOfFrame + 2] == "X") {
+                    if (scoreTable[numberOfFrame + 4] == "X") {
+                        scoreByFrames.push((30))
+                        td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
+                    } else if (scoreTable[numberOfFrame + 4] != null) {
+                        scoreByFrames.push((20 + scoreTable[numberOfFrame + 4]))
+                        td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
+                    }
+                    return
+                }
+
+                if (scoreTable[numberOfFrame + 2] != null && scoreTable[numberOfFrame + 3] != null) {
+                    scoreByFrames.push((10 + scoreTable[numberOfFrame + 2] + scoreTable[numberOfFrame + 3]))
+                    td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
+                    return
+                }
+                return
+            }
+
             scoreByFrames.push((scoreTable[numberOfFrame] + scoreTable[numberOfFrame + 1]))
+            td.innerHTML = scoreByFrames[scoreByFrames.length - 1]
             console.log(scoreByFrames)
         }
     }
@@ -175,12 +211,3 @@ class bowlingGameManager {
 BGM = new bowlingGameManager();
 
 BGM.setStartButtonHandler();
-
-// BGM.playersInformations[0] = { name: "ROBERT", score: [] }
-
-//  0 1 2 3 4 5 6 7 8 9 //
-// [ , , , , , , , , , ] //
-
-// BGM.addLaunch(0, 10)
-// BGM.addLaunch(0, 2)
-// console.log(BGM.playersInformations[0].launchHistory)
