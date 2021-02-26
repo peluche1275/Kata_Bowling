@@ -90,10 +90,9 @@ class bowlingGameManager {
 
             buttonAddLaunch.addEventListener("click", (event) => {
                 const score = parseInt(document.getElementsByClassName("playerScoreTable_ScoreSelect")[i].value)
-                    // console.log(score)
                 this.addLaunch(i, score);
                 this.frameScoreCalcul(i);
-                this.frameScoreCalcul(i);
+                this.calculateTotalScore(i)
                 event.preventDefault();
             });
         }
@@ -103,49 +102,58 @@ class bowlingGameManager {
         const launchHistory = this.playersInformations[playerNumero].launchHistory;
         const printScoreTable = document.getElementsByClassName("allLaunchShow")[playerNumero];
         const td = printScoreTable.getElementsByTagName("td")
-        let numberOfStrikes = 0;
-        let positionInTheTableOnTheScreen;
-
-        if (launchHistory.length >= 21) {
-            console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
-            return
-        }
+        let positionInTheTableOnTheScreen = 0
 
         if (fallenPins > 10) {
             console.log("ERREUR : IL N'Y A QUE 10 QUILLES")
             return
         }
 
-        for (let i = 0; i < launchHistory.length; i++) {
-            if (launchHistory[i] == "X") {
-                numberOfStrikes++
+        for (let i = 0; i < 21; i++) {
+            if (td[i].innerHTML == "") {
+                positionInTheTableOnTheScreen = i;
+                break;
             }
         }
 
-        positionInTheTableOnTheScreen = launchHistory.length + numberOfStrikes
+        if (positionInTheTableOnTheScreen == 20) {
+            console.log("Ah, je m'active!")
+            if ((launchHistory[launchHistory.length - 1] + launchHistory[launchHistory.length - 2]) == 10) {
+                console.log("it's ok")
+            } else if (launchHistory[launchHistory.length - 1] == "X" && launchHistory[launchHistory.length - 2] == "X") {
+                console.log("it's ok")
+            } else {
+                console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
+                return
+            }
+        }
 
         if (positionInTheTableOnTheScreen % 2 != 0) { // SECOND LANCER DU FRAMES
             const previousLaunch = launchHistory[launchHistory.length - 1]
 
-            if ((fallenPins + previousLaunch) > 10 || previousLaunch == "X") {
-                console.log("ERREUR IL N'Y A QUE 10 QUILLES")
+            if ((fallenPins + previousLaunch) > 10 || previousLaunch == "X" && positionInTheTableOnTheScreen < 18) {
+                console.log("ERREUR VOUS NE POUVEZ PAS FAIRE TOMBER AUTANT DE QUILLE MA BONNE DAME")
                 return
             }
         }
 
         if (fallenPins === 10) {
-            if (launchHistory[launchHistory.length - 1] == 0) {
+            if (launchHistory[launchHistory.length - 1] == 0 && (positionInTheTableOnTheScreen % 2) != 0) {
                 launchHistory.push(10);
-                printScoreTable.getElementsByTagName("td")[positionInTheTableOnTheScreen].innerHTML = "/"
+                td[positionInTheTableOnTheScreen].innerHTML = "/"
             } else {
                 launchHistory.push("X");
-                printScoreTable.getElementsByTagName("td")[positionInTheTableOnTheScreen + 1].innerHTML = "X"
+                if (positionInTheTableOnTheScreen > 17) {
+                    td[positionInTheTableOnTheScreen].innerHTML = "X"
+                } else {
+                    td[positionInTheTableOnTheScreen].innerHTML = " "
+                    td[positionInTheTableOnTheScreen + 1].innerHTML = "X"
+                }
             }
             return
         }
-        td[positionInTheTableOnTheScreen].innerHTML = fallenPins;
-
         launchHistory.push(fallenPins);
+        td[positionInTheTableOnTheScreen].innerHTML = fallenPins;
     }
 
     frameScoreCalcul(playerNumero) {
@@ -170,8 +178,8 @@ class bowlingGameManager {
                 td[scoreByFrames.length - 1].innerHTML = scoreByFrames[scoreByFrames.length - 1]
             }
             return
-        } else if (launchHistory[index] != null && launchHistory[index + 1] != null) {
-            if ((launchHistory[index] + launchHistory[index + 1]) == 10) {
+        } else if (launchHistory[index] != null && launchHistory[index + 1] != null) { // 2 COUPS
+            if ((launchHistory[index] + launchHistory[index + 1]) == 10) { // SPARES
                 if (launchHistory[index + 2] != null) {
                     if (launchHistory[index + 2] == "X") {
                         scoreByFrames.push(20)
@@ -187,6 +195,17 @@ class bowlingGameManager {
             this.playersInformations[playerNumero].index += 2;
             td[scoreByFrames.length - 1].innerHTML = scoreByFrames[scoreByFrames.length - 1]
         }
+    }
+
+    calculateTotalScore(playerNumero) {
+        const scoreByFrames = this.playersInformations[playerNumero].scoreByFrames;
+        const printScoreTable = document.getElementsByClassName("allLaunchShow")[playerNumero];
+        const td = printScoreTable.getElementsByTagName("td")[21]
+        let totalScore = 0;
+        for (let i = 0; i < scoreByFrames.length; i++) {
+            totalScore += scoreByFrames[i]
+        }
+        td.innerHTML = totalScore;
     }
 
     AddLeaveButton() {
