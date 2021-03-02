@@ -132,7 +132,7 @@ class bowlingGameManager {
         if (score === "XX") {
             box[IndexOfSlotToFill].innerHTML = " ";
             box[IndexOfSlotToFill + 1].innerHTML = "X";
-        } else {
+        } else if (score != null) {
             box[IndexOfSlotToFill].innerHTML = score;
         }
     }
