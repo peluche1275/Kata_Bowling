@@ -104,17 +104,17 @@ class bowlingGameManager {
     }
 
     addScoreToTheScoreboard(playerNumero, score) {
-        const slotToFill = this.defineTheSlotToFill(playerNumero);
-        const playerThrow = this.returnThePlayerThrow(playerNumero, score, slotToFill);
+        const IndexOfSlotToFill = this.defineTheIndexOfSlotToFill(playerNumero);
+        const playerThrow = this.returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill);
         const frameScore = this.returnTheFrameScore(playerNumero);
         const actualTotalScore = this.calculateActualTotalScore(playerNumero);
 
-        this.displayThePlayerThrow(playerNumero, slotToFill, playerThrow);
-        this.showFramesScore(playerNumero, frameScore);
+        this.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow);
+        this.showFrameScore(playerNumero, frameScore);
         this.showActualTotalScore(playerNumero, actualTotalScore);
     }
 
-    defineTheSlotToFill(playerNumero) {
+    defineTheIndexOfSlotToFill(playerNumero) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
         const box = throwScoreboard.getElementsByTagName("td");
 
@@ -125,49 +125,48 @@ class bowlingGameManager {
         }
     }
 
-    displayThePlayerThrow(playerNumero, nextSlot, score) {
+    displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
         const box = throwScoreboard.getElementsByTagName("td");
 
-        switch (score) {
-            case "XX":
-                box[nextSlot].innerHTML = " ";
-                box[nextSlot + 1].innerHTML = "X";
-                break;
-            default:
-                if (score != null) {
-                    box[nextSlot].innerHTML = score;
-                }
-                break;
+        if (score === "XX") {
+            box[IndexOfSlotToFill].innerHTML = " ";
+            box[IndexOfSlotToFill + 1].innerHTML = "X";
+        } else {
+            box[IndexOfSlotToFill].innerHTML = score;
         }
     }
 
-    returnThePlayerThrow(playerNumero, score, slotToFill) {
+    returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill) {
         const throwHistory = this.playersInformations[playerNumero].throwHistory;
 
-        if (slotToFill === 20) {
+        if (IndexOfSlotToFill === 20) {
             if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
                 this.changeDisplayedErrorMessage("Vous avez atteint le nombre maximal de lancer");
                 return
             }
         }
 
-        if (slotToFill % 2 != 0) {
+        if (IndexOfSlotToFill % 2 != 0) {
             const previousThrow = throwHistory[throwHistory.length - 1]
 
-            if ((score + previousThrow) > 10 || previousThrow === "X" && slotToFill < 18) {
+            if ((score + previousThrow) > 10 || previousThrow === "X" && IndexOfSlotToFill < 18) {
                 this.changeDisplayedErrorMessage("Vous ne pouvez pas faire tomber autant de quille !");
                 return
+            }
+
+            if ((score + previousThrow) === 10) {
+                throwHistory.push(score);
+                return "/"
             }
         }
 
         if (score === 10) {
-            if (throwHistory[throwHistory.length - 1] === 0 && (slotToFill % 2) != 0) {
+            if (throwHistory[throwHistory.length - 1] === 0 && (IndexOfSlotToFill % 2) != 0) {
                 throwHistory.push(10);
-                return "/"
             } else {
                 throwHistory.push("X");
-                if (slotToFill > 17) {
+                if (IndexOfSlotToFill > 17) {
                     return "X"
                 } else {
                     return "XX"
@@ -180,7 +179,7 @@ class bowlingGameManager {
         return score;
     }
 
-    showFramesScore(playerNumero, score) {
+    showFrameScore(playerNumero, score) {
         const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
         const box = frameScoreboard.getElementsByTagName("td");
 
@@ -196,8 +195,8 @@ class bowlingGameManager {
 
         const firstThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame];
         const secondThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 1];
-        const currentFrame = firstThrow + secondThrow;
         const thirdThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2];
+        const currentFrame = firstThrow + secondThrow;
 
         if (firstThrow === "X") {
             if (secondThrow != null && thirdThrow != null) {
@@ -260,7 +259,6 @@ class bowlingGameManager {
             event.preventDefault();
         });
     }
-
 }
 
 // Lauch //
