@@ -7,13 +7,13 @@ class bowlingGameManager {
         const buttonStart = document.getElementById("startGame");
 
         buttonStart.addEventListener("click", (event) => {
-            this.requestNumbersOfPlayers();
-            event.preventDefault();
+            this.requestTheNumbersOfPlayers();
             buttonStart.style.display = "none";
+            event.preventDefault();
         });
     }
 
-    requestNumbersOfPlayers() {
+    requestTheNumbersOfPlayers() {
         const form = document.getElementById("requestForm");
         const submitButton = document.getElementById("requestButton");
         const select = document.getElementById("requestSelect");
@@ -21,13 +21,13 @@ class bowlingGameManager {
         form.style.display = "flex";
 
         submitButton.addEventListener("click", (event) => {
-            this.enterThePlayersNames(select.value);
+            this.askForPlayersNames(select.value);
             form.style.display = "none";
             event.preventDefault();
         });
     }
 
-    enterThePlayersNames(numberOfPlayers) {
+    askForPlayersNames(numberOfPlayers) {
         const form = document.getElementById("enterPlayerNameForm");
         const submitButton = document.getElementById("enterPlayerNameButton");
 
@@ -42,20 +42,27 @@ class bowlingGameManager {
         form.style.display = "flex";
 
         submitButton.addEventListener("click", (event) => {
-            if (this.checkInputs(numberOfPlayers)) {
-                this.savePlayersName(numberOfPlayers);
-                this.showTheScoreChart();
-                this.AddLeaveButton();
-                form.style.display = "none";
+            if (this.checkIfThePlayersNamesAreValid(numberOfPlayers) === false) {
+                this.changeDisplayedErrorMessage("Il y a un problème avec un pseudo!");
             } else {
-                this.showError();
+                this.createThePlayerInformation(numberOfPlayers);
+                this.displayTheScoreboardOfEachPlayer();
+                this.setAbandonButtonHandler();
+                this.changeDisplayedErrorMessage("");
+                form.style.display = "none";
             }
-
             event.preventDefault();
         })
     }
 
-    checkInputs(numberOfPlayers) {
+    changeDisplayedErrorMessage(message) {
+        const errorMessage = document.getElementById("errorMessage");
+
+        errorMessage.innerHTML = message;
+        errorMessage.style.display = "block";
+    }
+
+    checkIfThePlayersNamesAreValid(numberOfPlayers) {
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
 
@@ -65,164 +72,195 @@ class bowlingGameManager {
                 return false;
             }
         }
-
         return true;
     }
 
-    savePlayersName(numberOfPlayers) {
+    createThePlayerInformation(numberOfPlayers) {
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
-            const playerInformation = { name: input, launchHistory: [], scoreByFrames: [], index: 0 }
+            const playerInformation = { name: input, throwHistory: [], frameHistory: [], indexOfTheFirstThrowOfTheCurrentFrame: 0 }
             this.playersInformations.push(playerInformation);
         }
     }
 
-    showTheScoreChart() {
-        const scoreChart = document.getElementById("scoreChart");
-        scoreChart.style.display = "block";
-        for (let i = 0; i < this.playersInformations.length; i++) {
-            const scoreTable = document.getElementsByClassName("playerScoreTable")[i]
-            const buttonAddLaunch = document.getElementsByClassName("playerScoreTable_Button")[i]
-            const displayOfAPlayerName = document.getElementsByClassName("playerScoreTable_Name")[i];
+    displayTheScoreboardOfEachPlayer() {
+        const AllScoreboards = document.getElementById("AllScoreboards");
+        AllScoreboards.style.display = "block";
 
-            displayOfAPlayerName.innerHTML = this.playersInformations[i].name;
-            scoreTable.style.display = "block"
+        for (let playerNumero = 0; playerNumero < this.playersInformations.length; playerNumero++) {
+            const scoreboard = document.getElementsByClassName("scoreboard")[playerNumero]
+            const buttonAddThrow = document.getElementsByClassName("scoreboard_Button")[playerNumero];
+            const displayedName = document.getElementsByClassName("scoreboard_Name")[playerNumero];
 
-            buttonAddLaunch.addEventListener("click", (event) => {
-                const score = parseInt(document.getElementsByClassName("playerScoreTable_ScoreSelect")[i].value)
-                this.addLaunch(i, score);
-                this.frameScoreCalcul(i);
-                this.calculateTotalScore(i)
+            displayedName.innerHTML = this.playersInformations[playerNumero].name;
+            scoreboard.style.display = "block";
+
+            buttonAddThrow.addEventListener("click", (event) => {
+                const score = parseInt(document.getElementsByClassName("scoreboard_ScoreSelect")[playerNumero].value);
+                this.addScoreToTheScoreboard(playerNumero, score);
                 event.preventDefault();
             });
         }
     }
 
-    addLaunch(playerNumero, fallenPins) {
-        const launchHistory = this.playersInformations[playerNumero].launchHistory;
-        const printScoreTable = document.getElementsByClassName("allLaunchShow")[playerNumero];
-        const td = printScoreTable.getElementsByTagName("td")
-        let positionInTheTableOnTheScreen = 0
+    addScoreToTheScoreboard(playerNumero, score) {
+        const slotToFill = this.defineTheSlotToFill(playerNumero);
+        const playerThrow = this.returnThePlayerThrow(playerNumero, score, slotToFill);
+        const frameScore = this.returnTheFrameScore(playerNumero);
+        const actualTotalScore = this.calculateActualTotalScore(playerNumero);
 
-        if (fallenPins > 10) {
-            console.log("ERREUR : IL N'Y A QUE 10 QUILLES")
-            return
-        }
+        this.displayThePlayerThrow(playerNumero, slotToFill, playerThrow);
+        this.showFramesScore(playerNumero, frameScore);
+        this.showActualTotalScore(playerNumero, actualTotalScore);
+    }
+
+    defineTheSlotToFill(playerNumero) {
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const box = throwScoreboard.getElementsByTagName("td");
 
         for (let i = 0; i < 21; i++) {
-            if (td[i].innerHTML == "") {
-                positionInTheTableOnTheScreen = i;
+            if (box[i].innerHTML === "") {
+                return i;
+            }
+        }
+    }
+
+    displayThePlayerThrow(playerNumero, nextSlot, score) {
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const box = throwScoreboard.getElementsByTagName("td");
+
+        switch (score) {
+            case "XX":
+                box[nextSlot].innerHTML = " ";
+                box[nextSlot + 1].innerHTML = "X";
                 break;
-            }
+            default:
+                if (score != null) {
+                    box[nextSlot].innerHTML = score;
+                }
+                break;
         }
+    }
 
-        if (positionInTheTableOnTheScreen == 20) {
-            console.log("Ah, je m'active!")
-            if ((launchHistory[launchHistory.length - 1] + launchHistory[launchHistory.length - 2]) == 10) {
-                console.log("it's ok")
-            } else if (launchHistory[launchHistory.length - 1] == "X" && launchHistory[launchHistory.length - 2] == "X") {
-                console.log("it's ok")
-            } else {
-                console.log("ERREUR : VOUS AVEZ DEJA TROP JOUER")
+    returnThePlayerThrow(playerNumero, score, slotToFill) {
+        const throwHistory = this.playersInformations[playerNumero].throwHistory;
+
+        if (slotToFill === 20) {
+            if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
+                this.changeDisplayedErrorMessage("Vous avez atteint le nombre maximal de lancer");
                 return
             }
         }
 
-        if (positionInTheTableOnTheScreen % 2 != 0) { // SECOND LANCER DU FRAMES
-            const previousLaunch = launchHistory[launchHistory.length - 1]
+        if (slotToFill % 2 != 0) {
+            const previousThrow = throwHistory[throwHistory.length - 1]
 
-            if ((fallenPins + previousLaunch) > 10 || previousLaunch == "X" && positionInTheTableOnTheScreen < 18) {
-                console.log("ERREUR VOUS NE POUVEZ PAS FAIRE TOMBER AUTANT DE QUILLE MA BONNE DAME")
+            if ((score + previousThrow) > 10 || previousThrow === "X" && slotToFill < 18) {
+                this.changeDisplayedErrorMessage("Vous ne pouvez pas faire tomber autant de quille !");
                 return
             }
         }
 
-        if (fallenPins === 10) {
-            if (launchHistory[launchHistory.length - 1] == 0 && (positionInTheTableOnTheScreen % 2) != 0) {
-                launchHistory.push(10);
-                td[positionInTheTableOnTheScreen].innerHTML = "/"
+        if (score === 10) {
+            if (throwHistory[throwHistory.length - 1] === 0 && (slotToFill % 2) != 0) {
+                throwHistory.push(10);
+                return "/"
             } else {
-                launchHistory.push("X");
-                if (positionInTheTableOnTheScreen > 17) {
-                    td[positionInTheTableOnTheScreen].innerHTML = "X"
+                throwHistory.push("X");
+                if (slotToFill > 17) {
+                    return "X"
                 } else {
-                    td[positionInTheTableOnTheScreen].innerHTML = " "
-                    td[positionInTheTableOnTheScreen + 1].innerHTML = "X"
+                    return "XX"
                 }
             }
-            return
         }
-        launchHistory.push(fallenPins);
-        td[positionInTheTableOnTheScreen].innerHTML = fallenPins;
+
+        this.changeDisplayedErrorMessage("");
+        throwHistory.push(score);
+        return score;
     }
 
-    frameScoreCalcul(playerNumero) {
-        const launchHistory = this.playersInformations[playerNumero].launchHistory;
-        const index = this.playersInformations[playerNumero].index;
-        const scoreByFrames = this.playersInformations[playerNumero].scoreByFrames;
-        const printScoreTable = document.getElementsByClassName("frames")[playerNumero];
-        const td = printScoreTable.getElementsByTagName("td");
+    showFramesScore(playerNumero, score) {
+        const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
+        const box = frameScoreboard.getElementsByTagName("td");
 
-        if (launchHistory[index] == "X") { // STRIKES
-            if (launchHistory[index] != null && launchHistory[index + 1] != null && launchHistory[index + 2] != null) {
-                let sum = 0;
+        if (score != null) {
+            box[this.playersInformations[playerNumero].frameHistory.length - 1].innerHTML = score
+        }
+    }
+
+    returnTheFrameScore(playerNumero) {
+        const throwHistory = this.playersInformations[playerNumero].throwHistory;
+        const indexOfTheFirstThrowOfTheCurrentFrame = this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame;
+        const frameHistory = this.playersInformations[playerNumero].frameHistory;
+
+        const firstThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame];
+        const secondThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 1];
+        const currentFrame = firstThrow + secondThrow;
+        const thirdThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2];
+
+        if (firstThrow === "X") {
+            if (secondThrow != null && thirdThrow != null) {
+                let sumOfFrameScores = 0;
                 for (let i = 0; i < 3; i++) {
-                    if (launchHistory[index + i] == "X") {
-                        sum += 10
+                    if (throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i] === "X") {
+                        sumOfFrameScores += 10
                     } else {
-                        sum += launchHistory[index + i]
+                        sumOfFrameScores += throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i]
                     }
                 }
-                scoreByFrames.push(sum)
-                this.playersInformations[playerNumero].index += 1;
-                td[scoreByFrames.length - 1].innerHTML = scoreByFrames[scoreByFrames.length - 1]
-            }
-            return
-        } else if (launchHistory[index] != null && launchHistory[index + 1] != null) { // 2 COUPS
-            if ((launchHistory[index] + launchHistory[index + 1]) == 10) { // SPARES
-                if (launchHistory[index + 2] != null) {
-                    if (launchHistory[index + 2] == "X") {
-                        scoreByFrames.push(20)
-                    } else {
-                        scoreByFrames.push((10 + launchHistory[index + 2]))
-                    }
-                    this.playersInformations[playerNumero].index += 2;
-                    td[scoreByFrames.length - 1].innerHTML = scoreByFrames[scoreByFrames.length - 1]
-                }
+                frameHistory.push(sumOfFrameScores)
+                this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 1;
+                return frameHistory[frameHistory.length - 1]
+            } else {
                 return
             }
-            scoreByFrames.push((launchHistory[index] + launchHistory[index + 1]))
-            this.playersInformations[playerNumero].index += 2;
-            td[scoreByFrames.length - 1].innerHTML = scoreByFrames[scoreByFrames.length - 1]
+        } else if (firstThrow != null && secondThrow != null) {
+            if (currentFrame === 10) {
+                if (thirdThrow != null) {
+                    if (thirdThrow === "X") {
+                        frameHistory.push(20)
+                    } else {
+                        frameHistory.push((10 + thirdThrow))
+                    }
+                    this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 2;
+                    return frameHistory[frameHistory.length - 1]
+                } else {
+                    return
+                }
+            }
+            frameHistory.push(currentFrame)
+            this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 2;
+            return frameHistory[frameHistory.length - 1]
         }
     }
 
-    calculateTotalScore(playerNumero) {
-        const scoreByFrames = this.playersInformations[playerNumero].scoreByFrames;
-        const printScoreTable = document.getElementsByClassName("allLaunchShow")[playerNumero];
-        const td = printScoreTable.getElementsByTagName("td")[21]
+    showActualTotalScore(playerNumero, totalScore) {
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const box = throwScoreboard.getElementsByTagName("td")[21]
+
+        box.innerHTML = totalScore;
+    }
+
+    calculateActualTotalScore(playerNumero) {
+        const frameHistory = this.playersInformations[playerNumero].frameHistory;
         let totalScore = 0;
-        for (let i = 0; i < scoreByFrames.length; i++) {
-            totalScore += scoreByFrames[i]
+
+        for (let i = 0; i < frameHistory.length; i++) {
+            totalScore += frameHistory[i]
         }
-        td.innerHTML = totalScore;
+        return totalScore;
     }
 
-    AddLeaveButton() {
-        const buttonLeave = document.getElementById("leaveButton");
+    setAbandonButtonHandler() {
+        const buttonAbandon = document.getElementById("leaveButton");
 
-        buttonLeave.addEventListener("click", (event) => {
+        buttonAbandon.addEventListener("click", (event) => {
             document.location.reload();
             event.preventDefault();
         });
     }
 
-    showError() {
-        const errorMessage = document.getElementById("errorMessage");
-
-        errorMessage.innerHTML = "Il y a un problème avec un pseudo";
-        errorMessage.style.display = "block";
-    }
 }
 
 // Lauch //
