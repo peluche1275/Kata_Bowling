@@ -114,6 +114,8 @@ class bowlingGameManager {
         this.showActualTotalScore(playerNumero, actualTotalScore);
     }
 
+    // OK //
+
     defineTheIndexOfSlotToFill(playerNumero) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
         const box = throwScoreboard.getElementsByTagName("td");
@@ -251,6 +253,8 @@ class bowlingGameManager {
         return totalScore;
     }
 
+    // OK //
+
     setAbandonButtonHandler() {
         const buttonAbandon = document.getElementById("leaveButton");
 
@@ -259,6 +263,7 @@ class bowlingGameManager {
             event.preventDefault();
         });
     }
+
 }
 
 // Lauch //

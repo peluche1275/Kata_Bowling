@@ -21,8 +21,8 @@ form {
     flex-direction: column;
 }
 
-#errorMessage,
-.hidden {
+.hidden,
+#leaveButton {
     display: none;
 }
 
