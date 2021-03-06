@@ -47,12 +47,20 @@ class bowlingGameManager {
             this.scoreboard.displayedNames[playerNumero].innerHTML = this.playersInformations[playerNumero].name;
             this.scoreboard.scoreboards[playerNumero].style.display = "block";
 
-            this.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
+            this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
                 const score = parseInt(this.scoreboard.scoreSelect[playerNumero].value);
-                this.addScoreToTheScoreboard(playerNumero, score);
+                this.scoreboard.addScoreToTheScoreboard(playerNumero, score);
                 event.preventDefault();
             });
         }
+    }
+
+    setAbandonButtonHandler() {
+        this.scoreboard.buttonAbandon.style.display = "block";
+        this.scoreboard.buttonAbandon.addEventListener("click", (event) => {
+            document.location.reload();
+            event.preventDefault();
+        });
     }
 
 
