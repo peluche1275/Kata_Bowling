@@ -114,8 +114,6 @@ class bowlingGameManager {
         this.showActualTotalScore(playerNumero, actualTotalScore);
     }
 
-    // OK //
-
     defineTheIndexOfSlotToFill(playerNumero) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
         const box = throwScoreboard.getElementsByTagName("td");
@@ -126,6 +124,8 @@ class bowlingGameManager {
             }
         }
     }
+
+    // OK //
 
     displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
@@ -139,47 +139,6 @@ class bowlingGameManager {
         }
     }
 
-    returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill) {
-        const throwHistory = this.playersInformations[playerNumero].throwHistory;
-
-        if (IndexOfSlotToFill === 20) {
-            if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
-                this.changeDisplayedErrorMessage("Vous avez atteint le nombre maximal de lancer");
-                return
-            }
-        }
-
-        if (IndexOfSlotToFill % 2 != 0) {
-            const previousThrow = throwHistory[throwHistory.length - 1]
-
-            if ((score + previousThrow) > 10 || previousThrow === "X" && IndexOfSlotToFill < 18) {
-                this.changeDisplayedErrorMessage("Vous ne pouvez pas faire tomber autant de quille !");
-                return
-            }
-
-            if ((score + previousThrow) === 10) {
-                throwHistory.push(score);
-                return "/"
-            }
-        }
-
-        if (score === 10) {
-            if (throwHistory[throwHistory.length - 1] === 0 && (IndexOfSlotToFill % 2) != 0) {
-                throwHistory.push(10);
-            } else {
-                throwHistory.push("X");
-                if (IndexOfSlotToFill > 17) {
-                    return "X"
-                } else {
-                    return "XX"
-                }
-            }
-        }
-
-        this.changeDisplayedErrorMessage("");
-        throwHistory.push(score);
-        return score;
-    }
 
     showFrameScore(playerNumero, score) {
         const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
