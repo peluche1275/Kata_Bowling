@@ -263,6 +263,6 @@ class bowlingGameManager {
 
 // Lauch //
 
-BGM = new bowlingGameManager();
+const BGM = new bowlingGameManager();
 
 BGM.setStartButtonHandler();
