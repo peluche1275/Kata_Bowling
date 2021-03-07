@@ -26,12 +26,12 @@ class scoreboard {
     addScoreToTheScoreboard(playerNumero, score) {
         const IndexOfSlotToFill = this.defineTheIndexOfSlotToFill(playerNumero);
         const playerThrow = this.returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill);
-        // const frameScore = this.returnTheFrameScore(playerNumero);
-        // const actualTotalScore = this.calculateActualTotalScore(playerNumero);
+        const frameScore = this.returnTheFrameScore(playerNumero);
+        const actualTotalScore = this.calculateActualTotalScore(playerNumero);
 
-        // this.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow);
-        // this.showFrameScore(playerNumero, frameScore);
-        // this.showActualTotalScore(playerNumero, actualTotalScore);
+        this.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow);
+        this.showFrameScore(playerNumero, frameScore);
+        this.showActualTotalScore(playerNumero, actualTotalScore);
     }
 
     defineTheIndexOfSlotToFill(playerNumero) {
@@ -44,46 +44,34 @@ class scoreboard {
         }
     }
 
-    returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill) {
-        const throwHistory = this.playersInformations[playerNumero].throwHistory;
+    displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const box = throwScoreboard.getElementsByTagName("td");
 
-        if (IndexOfSlotToFill === 20) {
-            if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
-                // this.changeDisplayedErrorMessage("Vous avez atteint le nombre maximal de lancer");
-                return
-            }
+        if (score === "X" && IndexOfSlotToFill < 17) {
+            box[IndexOfSlotToFill].innerHTML = " ";
+            box[IndexOfSlotToFill + 1].innerHTML = "X";
+        } else if (score != null) {
+            box[IndexOfSlotToFill].innerHTML = score;
         }
-
-        if (IndexOfSlotToFill % 2 != 0) {
-            const previousThrow = throwHistory[throwHistory.length - 1]
-
-            if ((score + previousThrow) > 10 || previousThrow === "X" && IndexOfSlotToFill < 18) {
-                // this.changeDisplayedErrorMessage("Vous ne pouvez pas faire tomber autant de quille !");
-                return
-            }
-
-            if ((score + previousThrow) === 10) {
-                // throwHistory.push(score);
-                return "/"
-            }
-        }
-
-        if (score === 10) {
-            if (throwHistory[throwHistory.length - 1] === 0 && (IndexOfSlotToFill % 2) != 0) {
-                throwHistory.push(10);
-            } else {
-                // throwHistory.push("X");
-                if (IndexOfSlotToFill > 17) {
-                    return "X"
-                } else {
-                    return "XX"
-                }
-            }
-        }
-
-        this.changeDisplayedErrorMessage("");
-        throwHistory.push(score);
-        return score;
     }
+
+    showFrameScore(playerNumero, score) {
+        const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
+        const box = frameScoreboard.getElementsByTagName("td");
+
+        if (score != null) {
+            box[this.playersInformations[playerNumero].frameHistory.length - 1].innerHTML = score
+        }
+    }
+
+    showActualTotalScore(playerNumero, totalScore) {
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const box = throwScoreboard.getElementsByTagName("td")[21]
+
+        box.innerHTML = totalScore;
+    }
+
+
 
 }
