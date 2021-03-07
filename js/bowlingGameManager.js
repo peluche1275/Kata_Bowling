@@ -42,18 +42,40 @@ class bowlingGameManager {
         })
     }
 
+    // ICI //
+
     displayTheScoreboardOfEachPlayer() {
         for (let playerNumero = 0; playerNumero < this.numberOfPlayers; playerNumero++) {
             this.scoreboard.displayedNames[playerNumero].innerHTML = this.playersInformations[playerNumero].name;
             this.scoreboard.scoreboards[playerNumero].style.display = "block";
 
             this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
+
+                const throwHistory = this.playersInformations[playerNumero].throwHistory;
+                const IndexOfSlotToFill = this.scoreboard.defineTheIndexOfSlotToFill(playerNumero);
+                const playerCanPlay = this.scoreCalculator.checkIfThePlayerCanPlay(IndexOfSlotToFill, throwHistory);
+                const previousThrow = throwHistory[throwHistory.length - 1];
+                const itIsTheSecondThrow = this.scoreCalculator.checkIfItIsTheSecondThrow(IndexOfSlotToFill);
                 const score = parseInt(this.scoreboard.scoreSelect[playerNumero].value);
-                this.scoreboard.addScoreToTheScoreboard(playerNumero, score);
+                const validScore = this.scoreCalculator.checkIfThePlayerCanEnterThisScore(score, previousThrow, IndexOfSlotToFill);
+
+                if (playerCanPlay === false) {
+                    this.errorMessage.innerHTML = "Vous avez atteint le nombre maximal de lancer"
+                } else if (itIsTheSecondThrow && validScore == false) {
+                    this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille"
+                } else {
+                    const playerThrow = this.scoreCalculator.returnThePlayerThrow(itIsTheSecondThrow, previousThrow, throwHistory, score, IndexOfSlotToFill)
+                    this.scoreboard.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow)
+                    this.scoreCalculator.pushTheScoreInTheThrowHistory(throwHistory, playerThrow)
+                    console.log(throwHistory)
+                }
+
                 event.preventDefault();
             });
         }
     }
+
+    // ICI //
 
     setAbandonButtonHandler() {
         this.scoreboard.buttonAbandon.style.display = "block";

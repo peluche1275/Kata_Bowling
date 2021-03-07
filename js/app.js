@@ -125,8 +125,6 @@ class bowlingGameManager {
         }
     }
 
-    // OK //
-
     displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
         const box = throwScoreboard.getElementsByTagName("td");
@@ -211,8 +209,6 @@ class bowlingGameManager {
         }
         return totalScore;
     }
-
-    // OK //
 
     setAbandonButtonHandler() {
         const buttonAbandon = document.getElementById("leaveButton");
