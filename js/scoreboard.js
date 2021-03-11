@@ -56,12 +56,12 @@ class scoreboard {
         }
     }
 
-    showFrameScore(playerNumero, score) {
+    showFrameScore(playerNumero, score, frameHistory) {
         const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
         const box = frameScoreboard.getElementsByTagName("td");
 
         if (score != null) {
-            box[this.playersInformations[playerNumero].frameHistory.length - 1].innerHTML = score
+            box[frameHistory.length - 1].innerHTML = score
         }
     }
 

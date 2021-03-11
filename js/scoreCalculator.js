@@ -1,9 +1,10 @@
 class scoreCalculator {
     constructor() {}
 
-    returnThePlayerThrow(itIsTheSecondThrow, previousThrow, throwHistory, score, IndexOfSlotToFill) {
+    returnThePlayerThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, objet) {
+        const previousThrow = objet.throwHistory[objet.throwHistory.length - 1];
         const pair = this.checkIfItIsAPair(itIsTheSecondThrow, score, previousThrow)
-        const strike = this.checkIfItIsAStrike(score, throwHistory, IndexOfSlotToFill)
+        const strike = this.checkIfItIsAStrike(score, objet.throwHistory, IndexOfSlotToFill)
 
         if (pair) {
             score = "/"
@@ -64,39 +65,25 @@ class scoreCalculator {
         return itIsTheSecondThrow;
     }
 
-
-
-
-
-
-
-
-
-    // -------------------------------------- //
-
-    returnTheFrameScore(playerNumero) {
-        const throwHistory = this.playersInformations[playerNumero].throwHistory;
-        const indexOfTheFirstThrowOfTheCurrentFrame = this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame;
-        const frameHistory = this.playersInformations[playerNumero].frameHistory;
-
-        const firstThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame];
-        const secondThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 1];
-        const thirdThrow = throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2];
+    returnTheFrameScore(indexOfTheFirstThrowOfTheCurrentFrame, objet) {
+        const firstThrow = objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame];
+        const secondThrow = objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 1];
+        const thirdThrow = objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2];
         const currentFrame = firstThrow + secondThrow;
 
         if (firstThrow === "X") {
             if (secondThrow != null && thirdThrow != null) {
                 let sumOfFrameScores = 0;
                 for (let i = 0; i < 3; i++) {
-                    if (throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i] === "X") {
+                    if (objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i] === "X") {
                         sumOfFrameScores += 10
                     } else {
-                        sumOfFrameScores += throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i]
+                        sumOfFrameScores += objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i]
                     }
                 }
-                frameHistory.push(sumOfFrameScores)
-                this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 1;
-                return frameHistory[frameHistory.length - 1]
+                objet.frameHistory.push(sumOfFrameScores)
+                objet.indexOfTheFirstThrowOfTheCurrentFrame += 1;
+                return objet.frameHistory[objet.frameHistory.length - 1]
             } else {
                 return
             }
@@ -104,24 +91,24 @@ class scoreCalculator {
             if (currentFrame === 10) {
                 if (thirdThrow != null) {
                     if (thirdThrow === "X") {
-                        frameHistory.push(20)
+                        objet.frameHistory.push(20)
                     } else {
-                        frameHistory.push((10 + thirdThrow))
+                        objet.frameHistory.push((10 + thirdThrow))
                     }
-                    this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 2;
-                    return frameHistory[frameHistory.length - 1]
+                    objet.indexOfTheFirstThrowOfTheCurrentFrame += 2;
+                    return objet.frameHistory[objet.frameHistory.length - 1]
                 } else {
                     return
                 }
             }
-            frameHistory.push(currentFrame)
-            this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame += 2;
-            return frameHistory[frameHistory.length - 1]
+            objet.frameHistory.push(currentFrame)
+            objet.indexOfTheFirstThrowOfTheCurrentFrame += 2;
+            return objet.frameHistory[objet.frameHistory.length - 1]
         }
     }
 
-    calculateActualTotalScore(playerNumero) {
-        const frameHistory = this.playersInformations[playerNumero].frameHistory;
+    calculateActualTotalScore(objet) {
+        const frameHistory = objet.frameHistory;
         let totalScore = 0;
 
         for (let i = 0; i < frameHistory.length; i++) {

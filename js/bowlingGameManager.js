@@ -42,8 +42,6 @@ class bowlingGameManager {
         })
     }
 
-    // ICI //
-
     displayTheScoreboardOfEachPlayer() {
         for (let playerNumero = 0; playerNumero < this.numberOfPlayers; playerNumero++) {
             this.scoreboard.displayedNames[playerNumero].innerHTML = this.playersInformations[playerNumero].name;
@@ -60,14 +58,11 @@ class bowlingGameManager {
                 const validScore = this.scoreCalculator.checkIfThePlayerCanEnterThisScore(score, previousThrow, IndexOfSlotToFill);
 
                 if (playerCanPlay === false) {
-                    this.errorMessage.innerHTML = "Vous avez atteint le nombre maximal de lancer"
+                    this.errorMessage.innerHTML = "Vous avez atteint le nombre maximal de lancer";
                 } else if (itIsTheSecondThrow && validScore == false) {
-                    this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille"
+                    this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille";
                 } else {
-                    const playerThrow = this.scoreCalculator.returnThePlayerThrow(itIsTheSecondThrow, previousThrow, throwHistory, score, IndexOfSlotToFill)
-                    this.scoreboard.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow)
-                    this.scoreCalculator.pushTheScoreInTheThrowHistory(throwHistory, playerThrow)
-                    console.log(throwHistory)
+                    this.playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory);
                 }
 
                 event.preventDefault();
@@ -75,7 +70,25 @@ class bowlingGameManager {
         }
     }
 
-    // ICI //
+    playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory) {
+        const playerThrow = this.scoreCalculator.returnThePlayerThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, this.playersInformations[playerNumero]);
+
+        this.scoreboard.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow);
+
+        this.scoreCalculator.pushTheScoreInTheThrowHistory(throwHistory, playerThrow);
+
+        const indexOfTheFirstThrowOfTheCurrentFrame = this.playersInformations[playerNumero].indexOfTheFirstThrowOfTheCurrentFrame;
+
+        const frameHistory = this.playersInformations[playerNumero].frameHistory;
+
+        const frameThrow = this.scoreCalculator.returnTheFrameScore(indexOfTheFirstThrowOfTheCurrentFrame, this.playersInformations[playerNumero]);
+
+        this.scoreboard.showFrameScore(playerNumero, frameThrow, frameHistory);
+
+        const totalScore = this.scoreCalculator.calculateActualTotalScore(this.playersInformations[playerNumero]);
+
+        this.scoreboard.showActualTotalScore(playerNumero, totalScore);
+    }
 
     setAbandonButtonHandler() {
         this.scoreboard.buttonAbandon.style.display = "block";
