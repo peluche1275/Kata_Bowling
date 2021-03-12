@@ -10,7 +10,6 @@ class scoreboard {
 
     setTheScoreboard() {
         this.displayTheScoreboardOfEachPlayer();
-        // this.setAbandonButtonHandler();
     }
 
     createThePlayerInformation(numberOfPlayers) {

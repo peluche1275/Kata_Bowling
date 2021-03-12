@@ -71,40 +71,61 @@ class scoreCalculator {
         const thirdThrow = objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2];
         const currentFrame = firstThrow + secondThrow;
 
+        let canNotCalculate = false;
+        let score = undefined;
+
         if (firstThrow === "X") {
             if (secondThrow != null && thirdThrow != null) {
-                let sumOfFrameScores = 0;
-                for (let i = 0; i < 3; i++) {
-                    if (objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i] === "X") {
-                        sumOfFrameScores += 10
-                    } else {
-                        sumOfFrameScores += objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i]
-                    }
-                }
-                objet.frameHistory.push(sumOfFrameScores)
-                objet.indexOfTheFirstThrowOfTheCurrentFrame += 1;
-                return objet.frameHistory[objet.frameHistory.length - 1]
+                score = this.defineStrikeScore(objet, indexOfTheFirstThrowOfTheCurrentFrame);
             } else {
-                return
+                canNotCalculate = true;
             }
-        } else if (firstThrow != null && secondThrow != null) {
+        }
+
+        if (firstThrow != null && secondThrow != null) {
             if (currentFrame === 10) {
                 if (thirdThrow != null) {
-                    if (thirdThrow === "X") {
-                        objet.frameHistory.push(20)
-                    } else {
-                        objet.frameHistory.push((10 + thirdThrow))
-                    }
-                    objet.indexOfTheFirstThrowOfTheCurrentFrame += 2;
-                    return objet.frameHistory[objet.frameHistory.length - 1]
+                    score = this.defineScoreWithTheThrirdThrow(thirdThrow, objet);
                 } else {
-                    return
+                    canNotCalculate = true;
                 }
             }
+        } else {
+            canNotCalculate = true
+        }
+
+        if (canNotCalculate == true) {
+            score = undefined
+        } else if (score == undefined) {
             objet.frameHistory.push(currentFrame)
             objet.indexOfTheFirstThrowOfTheCurrentFrame += 2;
-            return objet.frameHistory[objet.frameHistory.length - 1]
+            score = objet.frameHistory[objet.frameHistory.length - 1]
         }
+        return score
+    }
+
+    defineScoreWithTheThrirdThrow(thirdThrow, objet) {
+        if (thirdThrow === "X") {
+            objet.frameHistory.push(20);
+        } else {
+            objet.frameHistory.push((10 + thirdThrow));
+        }
+        objet.indexOfTheFirstThrowOfTheCurrentFrame += 2;
+        return objet.frameHistory[objet.frameHistory.length - 1];
+    }
+
+    defineStrikeScore(objet, indexOfTheFirstThrowOfTheCurrentFrame) {
+        let sumOfFrameScores = 0;
+        for (let i = 0; i < 3; i++) {
+            if (objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i] === "X") {
+                sumOfFrameScores += 10;
+            } else {
+                sumOfFrameScores += objet.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + i];
+            }
+        }
+        objet.frameHistory.push(sumOfFrameScores);
+        objet.indexOfTheFirstThrowOfTheCurrentFrame += 1;
+        return objet.frameHistory[objet.frameHistory.length - 1];
     }
 
     calculateActualTotalScore(objet) {

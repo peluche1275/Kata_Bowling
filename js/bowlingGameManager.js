@@ -46,6 +46,7 @@ class bowlingGameManager {
         for (let playerNumero = 0; playerNumero < this.numberOfPlayers; playerNumero++) {
             this.scoreboard.displayedNames[playerNumero].innerHTML = this.playersInformations[playerNumero].name;
             this.scoreboard.scoreboards[playerNumero].style.display = "block";
+            this.setAbandonButtonHandler();
 
             this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
 
@@ -97,7 +98,4 @@ class bowlingGameManager {
             event.preventDefault();
         });
     }
-
-
-
 }
