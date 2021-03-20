@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="./favicon.ico">
     <title>Bowling Game Manager</title>
 </head>
 
 <body>
     <h1>Bowling Game Manager</h1>
+    <span id="winMessage"></span>
+
     <div id="app">
         <button id="startGame">Nouvelle Partie</button>
 
@@ -91,7 +94,7 @@
                         <td scope="row"></td>
                         <td scope="row"></td>
                         <td scope="row"></td>
-                        <td rowspan="2"></td>
+                        <td id="test" rowspan="2"></td>
                     </tr>
                     <tr class="frameScoreboard">
                         <td scope="row" colspan="2"></td>
@@ -107,6 +110,7 @@
                     </tr>
                 </tbody>
             </table>
+
         </div>
         <div class="scoreboard hidden">
             <p class="scoreboard_Name"></p>
@@ -179,6 +183,7 @@
                     </tr>
                 </tbody>
             </table>
+
         </div>
         <div class="scoreboard hidden">
             <p class="scoreboard_Name"></p>
@@ -251,6 +256,7 @@
                     </tr>
                 </tbody>
             </table>
+
         </div>
         <div class="scoreboard hidden">
             <p class="scoreboard_Name"></p>
@@ -323,6 +329,7 @@
                     </tr>
                 </tbody>
             </table>
+
         </div>
 
     </div>
@@ -330,12 +337,12 @@
     <button id="leaveButton">Abandonner</button>
     </div>
 </body>
+<script src="js/messageDisplayer.js"></script>
 <script src="js/scoreCalculator.js"></script>
 <script src="js/scoreboard.js"></script>
 <script src="js/formRequest.js"></script>
 <script src="js/nameRegister.js"></script>
 <script src="js/bowlingGameManager.js"></script>
 <script src="js/main.js"></script>
-<!-- <script src="js/app.js"></script> -->
 
 </html>
